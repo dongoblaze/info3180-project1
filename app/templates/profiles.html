@@ -1,16 +1,26 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
+{% block title %} Profiles {% endblock %}
 
+{% block main %}
 
-{%block main %}
-    <h1>Profiles</h1>
-    <br/>
-    <div>
-        <!--<form action="{{ url_for('profiles') }}" method="post"  enctype="application/json">
-            <button class="btn btn-lg btn-info submit-btn" type="submit">POST</button>
-        </form>-->
+{% for user in users %}
+
+<form action="{{ url_for('getuserid', id=user.id) }}" method="GET">
+    <div class="profiles">
+        <img class="pic" src="{{ url_for('static', filename='uploads/'+user.photo) }}"></img>
+        
+        <div class="info">
+            <span class="name">{{ user.first_name}} {{ user.last_name }}</span> <br/>
+            
+            <b>Gender:</b> {{ user.gender }} <br/>
+            <b>location:</b> {{ user.location }} <br/>
+            <button type="submit" class="btn btn-primary">View Profile</button>
+            
+        </div>
     </div>
-    {% for profile in profile %}
-        {% include 'individualprofile.html' %}
-    {% endfor %}
+</form>
+    <br/>
+{% endfor %}
+
 {% endblock %}

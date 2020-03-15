@@ -8,7 +8,6 @@ import os,random
 from app import app, db
 from flask import render_template, request, redirect, url_for, flash,jsonify
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm
 from flask_wtf import FlaskForm
 from app.models import UserProfile
 from werkzeug.utils import secure_filename
@@ -32,12 +31,11 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
  
-@app.route('/profile')
-
-def profile():
-    """Render website's home page."""
-    date = format_date_joined()
-    return render_template('profile.html',date=date)
+# @app.route('/profile')
+# def profile():
+#     """Render website's home page."""
+#     date = format_date_joined()
+#     return render_template('profile.html',date=date)
 def get_uploads():
     uploads = []
     for subdir, dirs, files in os.walk(app.config['UPLOAD_FOLDER']):
@@ -46,110 +44,87 @@ def get_uploads():
                 uploads.append(file)
     return uploads
 
-
-# @app.route('/profiles', methods=['GET','POST']|)
-# def profiles():
-#     profile_list=[]
+# @app.route('/profile/<id>', methods=["GET", "POST"])
+# def get_profile(id):
     
-#     profiles= UserProfile.query.filter_by().all()
+#     user = UserProfile.query.filter_by(id = id.first())
     
-#     if request.method == 'POST':
-#         for profile in profiles:
-#             profile_list +=[{'fname':profile.fname,'lname':profile.lname, 'userID':profile.id}]
-#         return jsonify(users=profile_list)
-#     elif request.method == 'GET':
-#         return render_template('profiles.html', profile=profiles)
-#     return redirect(url_for('home'))
-
-
-
-# def get_files():
-#     rootdir = os.getcwd()
-#     print (rootdir)
-#     fileslist =[]
-#     for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
-#         for file in files:
-#             fileslist.append(os.path.join(subdir, file).split('/')[-1])
-#     return fileslist
-@app.route('/files')
-def files():
-    if not session.get('logged_in'):
-        abort(401)
+#     if request.method == "GET":
+#         file_folder = app.config['UPLOAD_FOLDER']
+#         return render_template("view_user.html", user=user)
     
-    files=get_files()
-    return render_template('files.html', files = files)
+#     elif request.method == "POST":
+#         if user is not None:
+#             response = make_response(jsonify(id=id, fname=user.fname,lname=user.lname,gender=user.gender, email=user.email,location=user.location, age=user.biography,photo=user.photo,
+#             profile_created_on =user.profile_created_on))
+#             response.headers['Content-Type'] = 'application/json'            
+#             return response
+#         else:
+#             flash('No User Found', 'danger')
+#             return redirect(url_for("home"))
+@app.route('/profile/<id>')
+def getuserid(id):
+    """Render an individual user profile by the specific user's id."""
+    userprofile =UserProfile.query.filter_by(id=int(id)).first()
+    return render_template('view_user.html', userprofile=userprofile)
+
+# @app.route('/files')
+# def files():
+#     if not session.get('logged_in'):
+#         abort(401)
+    
+#     files=get_files()
+#     return render_template('files.html', files = files)
     
 def format_date_joined():
     datetime.datetime.now()
     date_joined = datetime.date(2020, 3, 10)
     return "Joined on "     + date_joined.strftime("%B %d, %Y") 
 
-@app.route('/addprofile/',methods=('GET', 'POST'))
-def addprofile():
+@app.route('/profile/',methods=('GET', 'POST'))
+def profile():
     """Render the website's about page."""
     form=AddProfile()
     if request.method == 'POST' and form.validate_on_submit():
         if form.validate_on_submit():
-
+            file_folder = app.config['UPLOAD_FOLDER']
             fname = form.fname.data
             lname = form.lname.data
             gender = form.gender.data
             email =form.email.data
             location = form.location.data
             biography = form.biography.data
-            photo = form.photo.data
-            filename = secure_filename(photo.filename)
-            photo.save(os.path.join(
-            app.config['UPLOAD_FOLDER'], filename
-        ))
+            pic = request.files['photo']
+            photo = secure_filename(pic.filename)
+            pic.save(os.path.join(file_folder, photo))
+        
             flash('File Saved', 'success')
              # generate user_id, username and date
             id = genId(fname, lname)
             date_created = datetime.date.today()
             # NewProfile = UserProfile(request.form['fname'], request.form['lname'],request.form['gender'],request.form['email'], request.files['file'].filename,request.form['biography'], request.form['photo'].filename)
             
-            NewProfile = UserProfile(fname=fname, lname=lname,gender=gender,email=email,location=location, biography=biography, photo=photo,profile_created_on=date_created)
+            NewProfile = UserProfile(id=id,fname=fname, lname=lname,gender=gender,email=email,location=location, biography=biography, photo=photo,profile_created_on=date_created)
 
             db.session.add(NewProfile)
-
             db.session.commit()
         
         return redirect(url_for('profile', fname=fname,lname=lname,gender=gender,  email=email, location=location,biography=biography ))
     return render_template('addprofile.html',form=form)
-# @app.route("/login", methods=["GET", "POST"])
-# def login():
-#     if current_user.is_authenticated:
-#         # if user is already logged in, just redirect them to our secure page
-#         # or some other page like a dashboard
-#         return redirect(url_for('profile'))
-#     form = LoginForm()
-#     if request.method == "POST" and form.validate_on_submit():
-#         # change this to actually validate the entire form submission
-#         # and not just one field
-#          email = form.email.data
-#          password = form.password.data
-
-#          user = UserProfile.query.filter_by(email=email).first()
-
-
-#          flash('Logged in successfully.', 'success')
-
-#          if form.email.data:
-#             # Get the username and password values from the form.
-
-#             # using your model, query database for a user based on the username
-#             # and password submitted. Remember you need to compare the password hash.
-#             # You will need to import the appropriate function to do so.
-#             # Then store the result of that query to a `user` variable so it can be
-#             # passed to the login_user() method below.
-
-#             # get user id, load into session
-#             login_user(user)
-
-#             # remember to flash a message to the user
-#             return redirect(url_for("profile"))  # they should be redirected to a secure-page route instead
-#     return render_template("login.html", form=form)
-
+@app.route('/profiles', methods=["GET", "POST"])
+def profiles():
+    
+    users = UserProfile.query.all()
+    user_list = [{ "id": user.id} for user in users]
+    
+    if request.method == "GET":
+        file_folder = app.config['UPLOAD_FOLDER']
+        return render_template("profiles.html", users=users)
+    
+    elif request.method == "POST":
+        response = make_response(jsonify({"users": user_list}))                                           
+        response.headers['Content-Type'] = 'application/json'            
+        return response
 #@app.route('/profile/<userid>', methods=['GET', 'POST'])
 #def userprofile(userid):
     #json={}
@@ -163,14 +138,6 @@ def addprofile():
 
     #return render_template('profile.html')
 
-# @app.route("/logout")
-# @login_required
-# def logout():
-#     # Logout the user and end the session
-#     logout_user()
-#     flash('You have been logged out.', 'danger')
-#     return redirect(url_for('home'))
-# Flash errors from the form if validation fails
 
 def genId(fname, lname):
     nid = []

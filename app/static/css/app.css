@@ -14,6 +14,25 @@
 
 }
 
+
+.profiles{
+    background-color: white;
+    border-radius: 10px;
+    border-top: 3px solid blue ;
+    display: flex ;
+    align-items: center;
+    width: min-content;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.info{
+    margin-right: 100px;
+    width: 250px;
+}
+
+
+
 .color{
     padding:20px 20px;
     background-color: red;
@@ -33,6 +52,11 @@ img{
     
 }
 
+.pic{
+    height:150px;
+    width:150px;
+    
+}
 #flex{
     padding: 40px 50px;
     padding-top: 5px;
