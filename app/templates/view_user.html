@@ -6,19 +6,29 @@
   {% block main %}
   
   <div class="profile">
-      <img src="{{ url_for('static', filename='uploads/'+ userprofile.photo) }}"></img>
-  
-      <div class="info">
-          <span class="name">{{ userprofile.first_name}} {{ userprofile.last_name }}</span> <br/>
-          <!-- <span class="cdate"><b>Profile Created On: </b>{{ userprofile.profile_created_on }}</span> <br/><br/>
-           -->
-          <b>Email:</b> {{ userprofile.email }} <br/>
-          <b>Location:</b> {{ userprofile.location }} <br/>
-          <b>Joined:</b>  {{ userprofile.profile_created_on }}<br/>
-          <b>About me:</b> {{ userprofile.biography }}  <br/>
-          <button class="button"> Message </button>
-          <button class="button"> Follow </button>    
-      </div>
+      <div id="proinfo">
+          <img id="propic" src="{{ url_for('static', filename='uploads/'+ userprofile.photo) }}"></img> 
+      
+          <div class="info">
+            <h3 class="name">{{ userprofile.fname}} {{ userprofile.lname }}</h3> 
+              <!-- <span class="cdate"><b>Profile Created On: </b>{{ userprofile.profile_created_on }}</span> <br/><br/>
+              -->
+            <p class="gender">  <img class="icon" src="../static/email.png"/> {{ userprofile.email }} </p> 
+            <p class="location"> <img class="icon" src="../static/location.png"/> {{ userprofile.location }}</p> 
+            <p class ="location"> <img class="icon" src="../static/date.png"/> Joined on {{ userprofile.profile_created_on }}</p>
+          </div>
+      </div>    
+
+        <div id="biog">
+          <h4 class="bio"> About Me</h4>
+        <p id="about"> {{ userprofile.biography }}   </p> 
+        
+      </div>  
+      <div id="buttons">
+            
+              <button id="message" class="button"> Send Message </button>
+              <button id ="follow"class="button"> Follow </button>    
+        </div>
   </div>
   
   {% endblock %}

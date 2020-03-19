@@ -31,11 +31,7 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
  
-# @app.route('/profile')
-# def profile():
-#     """Render website's home page."""
-#     date = format_date_joined()
-#     return render_template('profile.html',date=date)
+
 def get_uploads():
     uploads = []
     for subdir, dirs, files in os.walk(app.config['UPLOAD_FOLDER']):
@@ -44,37 +40,14 @@ def get_uploads():
                 uploads.append(file)
     return uploads
 
-# @app.route('/profile/<id>', methods=["GET", "POST"])
-# def get_profile(id):
-    
-#     user = UserProfile.query.filter_by(id = id.first())
-    
-#     if request.method == "GET":
-#         file_folder = app.config['UPLOAD_FOLDER']
-#         return render_template("view_user.html", user=user)
-    
-#     elif request.method == "POST":
-#         if user is not None:
-#             response = make_response(jsonify(id=id, fname=user.fname,lname=user.lname,gender=user.gender, email=user.email,location=user.location, age=user.biography,photo=user.photo,
-#             profile_created_on =user.profile_created_on))
-#             response.headers['Content-Type'] = 'application/json'            
-#             return response
-#         else:
-#             flash('No User Found', 'danger')
-#             return redirect(url_for("home"))
+
 @app.route('/profile/<id>')
 def getuserid(id):
     """Render an individual user profile by the specific user's id."""
     userprofile =UserProfile.query.filter_by(id=int(id)).first()
     return render_template('view_user.html', userprofile=userprofile)
 
-# @app.route('/files')
-# def files():
-#     if not session.get('logged_in'):
-#         abort(401)
-    
-#     files=get_files()
-#     return render_template('files.html', files = files)
+
     
 def format_date_joined():
     datetime.datetime.now()
@@ -125,18 +98,7 @@ def profiles():
         response = make_response(jsonify({"users": user_list}))                                           
         response.headers['Content-Type'] = 'application/json'            
         return response
-#@app.route('/profile/<userid>', methods=['GET', 'POST'])
-#def userprofile(userid):
-    #json={}
-    #user = UserProfile.query.filter_by(id=userid).first()
-    #if request.method == 'POST':
-       # json={'userid':user.id, 'username':user.username, 'profile_image':user.pic, 'gender':user.gender, 'age':user.age, 'created_on':user.created}
-        #return jsonify(json)
 
-    #elif request.method == 'GET' and user:
-        #return render_template('individual.html', profile=user)
-
-    #return render_template('profile.html')
 
 
 def genId(fname, lname):

@@ -9,13 +9,13 @@ class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
 
     id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(80))
-    lname = db.Column(db.String(80))
-    gender = db.Column(db.String(80))
-    email = db.Column(db.String(80))
-    location = db.Column(db.String(80))
-    biography = db.Column(db.String(80))
-    photo=db.Column(db.String(80))
+    fname = db.Column(db.String(255))
+    lname = db.Column(db.String(255))
+    gender = db.Column(db.String(255))
+    email = db.Column(db.String(255))
+    location = db.Column(db.String(255))
+    biography = db.Column(db.String(255))
+    photo=db.Column(db.String(255))
     profile_created_on = db.Column(db.String(255))
 
 
