@@ -139,7 +139,7 @@ def add_header(response):
     to we could change max-age to 600 seconds which would be 10 minutes.
     """
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-    response.headers['Cache- rol'] = 'public, max-age=0'
+    response.headers['Cache-Control'] = 'public, max-age=0'
     return response
 
 
