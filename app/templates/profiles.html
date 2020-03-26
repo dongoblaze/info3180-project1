@@ -12,11 +12,11 @@
         </div>    
         <div class="pinfo">
             <h4 class="name">{{ user.fname}} {{ user.lname }}</h4> <br/>
-            <p class :gender><b>Gender:</b> {{ user.gender }}</p> 
-            <p class :location></p><b>Location:</b> {{ user.location }} <br/>
+            <p class :gender><img class="icon" src="../static/personicon.png"/> {{ user.gender }}</p> 
+            <p class :location></p> <img class="icon" src="../static/location.png"/> {{ user.location }} <br/>
         </div>
         <div id="btninfo">
-            <button type="submit" class="btn btn-primary">View Profile</button>
+            <button id="a" type="submit" class="btn btn-primary">View Profile</button>
         </div>
     </div>
 </form>
